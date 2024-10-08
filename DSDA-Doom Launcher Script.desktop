@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=DSDA-Doom Launcher Script
+Exec="/path/to/dsda-doom-selector.sh"
+Icon=dsda-doom
+Terminal=true
+Categories=Game;
+Name[en_US]=DSDA-Doom Launcher Script
