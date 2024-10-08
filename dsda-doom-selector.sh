@@ -15,15 +15,14 @@ select iwad in "${iwad_options[@]}"; do
 done
 
 shopt -s nullglob # idk what that even is but it makes shit not think ".wad" is a valid selection when it cant find pwads in the dir
-wad_files=(*.wad)
+pwad_files=(*.wad)
 
 echo "Select a PWAD:"
-select wad_file in "None" "${wad_files[@]}"; do
+select pwad_file in "None" "${pwad_files[@]}"; do
   if [[ "$REPLY" == "1" ]]; then
-    wad_file="$iwad"  # if "None" is selected, use the iwad only, pretty dumb but idk how bash works and dsda is fine with being passed an iwad for -file lmao
-                      # psure i could somehow just exclude the -file param but no idea kek
-    break
-  elif [ -n "$wad_file" ]; then
+    dsda-doom -iwad "$iwad"
+    exit 1 #exit out here if we just want to play an IWAD
+  elif [ -n "$pwad_file" ]; then
     break
   else
     echo "Invalid selection."
@@ -31,4 +30,4 @@ select wad_file in "None" "${wad_files[@]}"; do
 done
 
 # run dsda with the selected wads
-dsda-doom -file "$wad_file" -iwad "$iwad"
+dsda-doom -file "$pwad_file" -iwad "$iwad"
