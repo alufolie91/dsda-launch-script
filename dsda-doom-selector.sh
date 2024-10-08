@@ -37,24 +37,33 @@ done
 shopt -s nullglob
 pwad_files=(*.wad)
 
-# Ensure there are PWADs in the current directory
+# make sure theres pwads in the directory
 if [ ${#pwad_files[@]} -eq 0 ]; then
   echo "No PWAD files found in the current directory. Only IWAD will be used."
   dsda-doom -iwad "$iwad"
   exit 0
 fi
 
-echo "Select a PWAD:"
-select pwad_file in "None" "${pwad_files[@]}"; do
-  if [[ "$REPLY" == "1" ]]; then
-    dsda-doom -iwad "$iwad"
-    exit 1 #exit out here if we just want to play an IWAD
-  elif [ -n "$pwad_file" ]; then
-    break
-  else
-    echo "Invalid selection."
-  fi
+selected_pwads=()
+while true; do
+  echo "Select a PWAD:"
+  select pwad_file in "Done" "${pwad_files[@]}"; do
+    if [[ "$REPLY" == "1" ]]; then
+      break 2
+    elif [ -n "$pwad_file" ]; then
+      # add the selected PWAD to the list
+      selected_pwads+=("$pwad_file")
+      echo -e "Selected PWADs: ${selected_pwads[*]}\n"
+      break
+    else
+      echo "Invalid selection."
+    fi
+  done
 done
 
 # run dsda with the selected wads
-dsda-doom -file "$pwad_file" -iwad "$iwad"
+if [ ${#selected_pwads[@]} -eq 0 ]; then
+  dsda-doom -iwad "$iwad" # well just run the iwad if you didnt select any pwad lmao
+else
+  dsda-doom -file "${selected_pwads[@]}" -iwad "$iwad"
+fi
